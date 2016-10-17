@@ -14,7 +14,7 @@ set(HUTRUA_SRCS
 )
 
 add_library(hutrua ${HUTRUA_SRCS})
-target_link_libraries (hutrua zlib libpng)
+target_link_libraries (hutrua libpng zlib)
 
 add_executable(test_hutrua test.cpp)
 target_link_libraries (test_hutrua hutrua)
