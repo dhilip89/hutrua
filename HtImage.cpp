@@ -85,8 +85,7 @@ bool HtImage::save_image(std::string path, HtImageEncodeType encode_type)
 		png_destroy_write_struct(&png_ptr, &info_ptr);
 		fclose(fp);
 		return true;
-	}
-	else if (encode_type = BMP) {
+	} else if (encode_type = BMP) {
 		FILE *fp;
 		fp = fopen(path.c_str(), "wb");
 		if (fp == NULL) {

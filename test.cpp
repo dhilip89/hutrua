@@ -38,10 +38,10 @@ int test_save_bmp() {
 
 int main() {
     hello();
-	if (!test_save_png()) {
+	if (test_save_png() != 0) {
 		return 1;
 	}
-	if (!test_save_bmp()) {
+	if (test_save_bmp() != 0) {
 		return 1;
 	}
 	return 0;

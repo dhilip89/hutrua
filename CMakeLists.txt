@@ -1,9 +1,8 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.1)
 
 project (hutrua)
 
-# need cmake 3.1
-#set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD 11)
 
 add_subdirectory(third_party)
 include_directories(${libpng_SOURCE_DIR})
