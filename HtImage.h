@@ -7,7 +7,8 @@ enum HtImageType {
 };
 
 enum HtImageEncodeType {
-	PNG
+	PNG,
+	BMP
 };
 
 class HtImage {
