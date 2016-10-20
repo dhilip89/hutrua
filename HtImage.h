@@ -1,10 +1,10 @@
-#ifndef HTIMAGE_H_
-#define HTIMAGE_H_
+#ifndef HT_IMAGE_H_
+#define HT_IMAGE_H_
 #include <string>
+#include "HtTypes.h"
+#include "HtCanvas.h"
 
-enum HtImageType {
-	RGBA8888
-};
+typedef HtCanvasType HtImageType;
 
 enum HtImageEncodeType {
 	PNG,
@@ -13,6 +13,7 @@ enum HtImageEncodeType {
 
 class HtImage {
 public:
+	DISALLOW_COPY_AND_ASSIGN(HtImage);
 	HtImage(int width, int height, HtImageType type = RGBA8888, void* data = NULL);
 	~HtImage();
 	bool save_image(std::string path, HtImageEncodeType);
@@ -25,4 +26,4 @@ private:
 	HtImageType type;
 };
 
-#endif // HTIMAGE_H_
+#endif // HT_IMAGE_H_
