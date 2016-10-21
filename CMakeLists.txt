@@ -8,7 +8,6 @@ add_subdirectory(third_party)
 include_directories(${libpng_SOURCE_DIR})
 
 set(HUTRUA_SRCS
-  hutrua.cpp
   HtImage.cpp
   HtCanvas.cpp
   HtBitmap.cpp
