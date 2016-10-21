@@ -1,7 +1,7 @@
 #ifndef HT_CANVAS_H_
 #define HT_CANVAS_H_
 #include "HtTypes.h"
-
+#include "HtBitmap.h"
 #include <memory>
 
 enum HtCanvasType {
@@ -10,23 +10,19 @@ enum HtCanvasType {
 
 class HtCanvas {
 public:
-	DISALLOW_COPY_AND_ASSIGN(HtCanvas);
 	HtCanvas(int width, int height, HtCanvasType type = RGBA8888);
-	~HtCanvas();
 
 	void drawRect(HtRect rect, HtColor color);
 
 	int getWidth() { return width; }
 	int getHeight() { return height; }
-	int getBytesPerPixel() { return bytes_per_pixel; }
 	HtCanvasType getType() { return type; }
-	unsigned char* getSrc() { return src; }
+	std::shared_ptr<HtBitmap> getBitmap() { return bitmap; }
 
 private:
-	unsigned char* src;
+	std::shared_ptr<HtBitmap> bitmap;
 	int width;
 	int height;
-	int bytes_per_pixel;
 	HtCanvasType type;
 };
 

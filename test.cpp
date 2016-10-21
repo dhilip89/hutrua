@@ -44,7 +44,7 @@ int test_canvas() {
 	canvas.drawRect({ { 50, 40 }, { 70, 80 } }, HT_GREEN);
 	canvas.drawRect({ { 10, 10 },{ 50, 40 } }, HT_BLUE);
 	canvas.drawRect({ { 30, 20 }, { 0, 0 } }, HT_BLUE);
-	HtImage image(canvas.getWidth(), canvas.getHeight(), canvas.getType(), canvas.getSrc());
+	HtImage image(canvas.getWidth(), canvas.getHeight(), canvas.getType(), canvas.getBitmap()->getRawData());
 	image.save_image("2.png", PNG);
 	return 0;
 }

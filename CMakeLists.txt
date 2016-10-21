@@ -11,6 +11,7 @@ set(HUTRUA_SRCS
   hutrua.cpp
   HtImage.cpp
   HtCanvas.cpp
+  HtBitmap.cpp
 )
 
 add_library(hutrua ${HUTRUA_SRCS})
