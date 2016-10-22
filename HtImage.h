@@ -4,8 +4,8 @@
 #include "HtBitmap.h"
 
 enum HtImageEncodeType {
-	PNG,
-	BMP
+    PNG,
+    BMP
 };
 
 bool save_image(HtBitmap* bitmap, const std::string path, HtImageEncodeType);
