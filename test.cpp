@@ -8,7 +8,10 @@ int test_save_image() {
 	HtBitmap bitmap(256, 256);
 	for (int i = 0; i < 256; i++) {
 		for (int j = 0; j < 256; j++) {
-			HtColor color{ (i + j) % 256, (256 + i - j) % 256, (256 + j - i) % 256, 255 };
+			HtColor color{ unsigned char((i + j) % 256),
+				unsigned char((256 + i - j) % 256),
+				unsigned char((256 + j - i) % 256),
+				unsigned char(255) };
 			bitmap.setPixel(i, j, color);
 		}
 	}
