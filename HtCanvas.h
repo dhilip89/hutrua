@@ -13,6 +13,7 @@ public:
     HtCanvas(int width, int height, HtCanvasType type = RGBA8888);
 
     void drawRect(HtRect rect, HtColor color);
+    void drawHairLine(HtPoint p1, HtPoint p2, HtColor color);
 
     int getWidth() { return width; }
     int getHeight() { return height; }
@@ -20,6 +21,8 @@ public:
     std::shared_ptr<HtBitmap> getBitmap() { return bitmap; }
 
 private:
+    void drawHairLine(int x0, int y0, int x1, int y1, HtColor color, int octant);
+
     std::shared_ptr<HtBitmap> bitmap;
     int width;
     int height;
