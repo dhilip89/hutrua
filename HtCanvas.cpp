@@ -25,29 +25,29 @@ void HtCanvas::drawHairLine(HtPoint p1, HtPoint p2, HtColor color) {
     if (p1.y <= p2.y) {
         if (p1.x <= p2.x) {
             if (p2.y - p1.y < p2.x - p1.x) {
-                drawHairLine(p1.x, p1.y, p2.x, p2.y, color, 0);
+                drawHairLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y), color, 0);
             } else {
-                drawHairLine(p1.y, p1.x, p2.y, p2.x, color, 1);
+                drawHairLine(int(p1.y), int(p1.x), int(p2.y), int(p2.x), color, 1);
             }
         } else {
             if (p2.y - p1.y > p1.x - p2.x) {
-                drawHairLine(p1.y, -p1.x, p2.y, -p2.x, color, 2);
+                drawHairLine(int(p1.y), int(-p1.x), int(p2.y), int(-p2.x), color, 2);
             } else {
-                drawHairLine(-p1.x, p1.y, -p2.x, p2.y, color, 3);
+                drawHairLine(int(-p1.x), int(p1.y), int(-p2.x), int(p2.y), color, 3);
             }
         }
     } else {
         if (p1.x > p2.x) {
             if (p2.y - p1.y > p2.x - p1.x) {
-                drawHairLine(-p1.x, -p1.y, -p2.x, -p2.y, color, 4);
+                drawHairLine(int(-p1.x), int(-p1.y), int(-p2.x), int(-p2.y), color, 4);
             } else {
-                drawHairLine(-p1.y, -p1.x, -p2.y, -p2.x, color, 5);
+                drawHairLine(int(-p1.y), int(-p1.x), int(-p2.y), int(-p2.x), color, 5);
             }
         } else {
             if (p1.y - p2.y > p2.x - p1.x) {
-                drawHairLine(-p1.y, p1.x, -p2.y, p2.x, color, 6);
+                drawHairLine(int(-p1.y), int(p1.x), int(-p2.y), int(p2.x), color, 6);
             } else {
-                drawHairLine(p1.x, -p1.y, p2.x, -p2.y, color, 7);
+                drawHairLine(int(p1.x), int(-p1.y), int(p2.x), int(-p2.y), color, 7);
             }
         }
     }

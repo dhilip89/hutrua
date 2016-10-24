@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_DEPRECATE
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
@@ -8,6 +9,10 @@
 #include "HtImage.h"
 #include "HtBitmap.h"
 #include "png.h"
+
+#ifdef _MSC_VER
+#pragma warning (disable : 4611)  // interaction between '_setjmp' and C++ object destruction is non-portable
+#endif // _MSC_VER
 
 bool save_png_image(HtBitmap* bitmap, const std::string path) {
     int width = bitmap->getW();

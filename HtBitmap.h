@@ -13,9 +13,9 @@ public:
     bool setPixels(int x, int y, int w, int h, HtColor);
 
 private:
-    std::vector<HtColor> bitmap;
     int w;
     int h;
+    std::vector<HtColor> bitmap;
 };
 
 #endif // HT_BITMAP_H_
