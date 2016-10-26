@@ -2,6 +2,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
+#include <utility>
+#include <algorithm>
 #include "HtCanvas.h"
 
 HtCanvas::HtCanvas(int width, int height, HtCanvasType type)
@@ -94,5 +96,36 @@ void HtCanvas::drawHairLine(int x0, int y0, int x1, int y1, HtColor color, int o
             D -= dx;
         }
         D += dy;
+    }
+}
+
+void HtCanvas::drawTriangle(HtPoint p1, HtPoint p2, HtPoint p3, HtColor color) {
+    // top: p1, left: p2, right: p3
+    if (p2.y < p1.y)
+        std::swap(p1, p2);
+    if (p3.y < p1.y)
+        std::swap(p1, p3);
+    if (p3.x < p2.x)
+        std::swap(p2, p3);
+
+    HtScalar d1, d2, x1 = p1.x, x2 = p1.x;
+    d1 = p2.y - p1.y ? (p2.x - p1.x) / (p2.y - p1.y) : 0;
+    d2 = p3.y - p1.y ? (p3.x - p1.x) / (p3.y - p1.y) : 0;
+    for (int y = int(p1.y); y < int(std::min(p2.y, p3.y)); y++) {
+        bitmap->setPixels(int(x1), int(y), int(x2) - int(x1) + 1, 1, color);
+        x1 += d1;
+        x2 += d2;
+    }
+    if (p2.y < p3.y) {
+        d1 = (p3.x - p2.x) / (p3.y - p2.y);
+        x1 = p2.x;
+    } else {
+        d2 = (p2.x - p3.x) / (p2.y - p3.y);
+        x2 = p3.x;
+    }
+    for (int y = int(std::min(p2.y, p3.y)); y <= int(std::max(p2.y, p3.y)); y++) {
+        bitmap->setPixels(int(x1), int(y), int(x2) - int(x1) + 1, 1, color);
+        x1 += d1;
+        x2 += d2;
     }
 }

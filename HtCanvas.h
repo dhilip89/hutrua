@@ -14,6 +14,7 @@ public:
 
     void drawRect(HtRect rect, HtColor color);
     void drawHairLine(HtPoint p1, HtPoint p2, HtColor color);
+    void drawTriangle(HtPoint p1, HtPoint p2, HtPoint p3, HtColor color);
 
     int getWidth() { return width; }
     int getHeight() { return height; }

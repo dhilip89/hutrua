@@ -13,6 +13,14 @@ typedef struct _HtPoint {
     HtScalar y;
 } HtPoint;
 
+inline HtPoint operator+(const HtPoint& a, const HtPoint& b) {
+    return HtPoint{ a.x + b.x, a.y + b.y };
+}
+
+inline HtPoint operator-(const HtPoint& a, const HtPoint& b) {
+    return HtPoint{ a.x - b.x, a.y - b.y };
+}
+
 typedef struct _HtSize {
     HtScalar w;
     HtScalar h;
