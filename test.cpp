@@ -87,6 +87,35 @@ int test_draw_line_2() {
     return 0;
 }
 
+int test_draw_line_3() {
+    HtCanvas canvas(500, 500);
+    HtPoint p1{ 50, 50 }, p2{ 50, 150 }, p3{ 100, 250 }, p4{ 20, 450 }, d{ 25, 0 };
+    HtScalar width = 0;
+    for (int i = 0; i < 20; i++) {
+        canvas.drawLine(p1, p2, width, HT_BLACK);
+        canvas.drawLine(p3, p4, width * 2, HT_BLACK);
+        p1 += d;
+        p2 += d;
+        p3 += d;
+        p4 += d;
+        width += 0.5;
+    }
+
+    HtPoint p5{ 400, 20 }, p6{ 480, 50 }, d2{ -20, 20 };
+    width = 0;
+    for (int i = 0; i < 23; i++) {
+        canvas.drawLine(p5, p6, width, HT_RED);
+        p5 += d2;
+        p6 += d2;
+        width += 1;
+    }
+
+    if (!save_image(canvas.getBitmap().get(), "draw_line_3.png", PNG)) {
+        return 1;
+    }
+    return 0;
+}
+
 int test_draw_triangle() {
     HtCanvas canvas(500, 500);
     HtPoint p1{ 200, 80 }, p2{ 80, 300 }, p3{ 240, 250 }, d{ 200, 0 }, d2{ 2, 0 };
@@ -136,6 +165,9 @@ int test_canvas() {
         return 1;
     }
     if (test_draw_line_2() != 0) {
+        return 1;
+    }
+    if (test_draw_line_3() != 0) {
         return 1;
     }
     if (test_draw_triangle() != 0) {

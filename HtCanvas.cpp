@@ -55,6 +55,19 @@ void HtCanvas::drawHairLine(HtPoint p1, HtPoint p2, HtColor color) {
     }
 }
 
+void HtCanvas::drawLine(HtPoint p1, HtPoint p2, HtScalar line_width, HtColor color)
+{
+    if (line_width < 1) {
+        drawHairLine(p1, p2, color);
+        return;
+    }
+
+    HtPoint w{ p1.y - p2.y, p2.x - p1.x };
+    w = 0.5 * (line_width - 1) * normal(w);
+    drawTriangle(p1 + w, p1 - w, p2 + w, color);
+    drawTriangle(p2 + w, p2 - w, p1 - w, color);
+}
+
 void HtCanvas::drawHairLine(int x0, int y0, int x1, int y1, HtColor color, int octant)
 {
     x1+=1;

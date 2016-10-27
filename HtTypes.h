@@ -1,6 +1,7 @@
 #ifndef HT_TYPES_H_
 #define HT_TYPES_H_
 #include <cassert>
+#include <cmath>
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
     TypeName(const TypeName&) = delete;    \
@@ -13,16 +14,33 @@ typedef struct _HtPoint {
     HtScalar y;
 } HtPoint;
 
-inline HtPoint operator+(const HtPoint& a, const HtPoint& b) {
+inline const HtPoint operator+(const HtPoint& a, const HtPoint& b) {
     return HtPoint{ a.x + b.x, a.y + b.y };
 }
 
-inline HtPoint operator-(const HtPoint& a, const HtPoint& b) {
+inline const HtPoint operator-(const HtPoint& a, const HtPoint& b) {
     return HtPoint{ a.x - b.x, a.y - b.y };
 }
 
-inline HtPoint operator* (const HtScalar &a, const HtPoint &b) {
+inline HtPoint& operator+=(HtPoint& a, const HtPoint& b) {
+    a.x += b.x;
+    a.y += b.y;
+    return a;
+}
+
+inline HtPoint& operator-=(HtPoint& a, const HtPoint& b) {
+    a.x -= b.x;
+    a.y -= b.y;
+    return a;
+}
+
+inline const HtPoint operator* (const HtScalar &a, const HtPoint &b) {
     return HtPoint{ a * b.x, a * b.y };
+}
+
+inline const HtPoint normal(const HtPoint& p) {
+    HtScalar w = 1 / std::sqrt(p.x * p.x + p.y * p.y);
+    return w * p;
 }
 
 typedef struct _HtSize {
