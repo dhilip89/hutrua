@@ -104,11 +104,23 @@ int test_draw_triangle() {
 
 int test_draw_triangle_2() {
     HtCanvas canvas(500, 500);
-    HtPoint p1{ 50, 50 }, p2{ 60, 50 }, p3{ 50, 60 }, p4{ 60, 60 }, d{ 40, 0 }, d2{ 0, 40 };
+    HtPoint p1{ 50, 50 }, p2{ 60, 50 }, p3{ 50, 60 }, p4{ 60, 60 },
+        p5{ 150, 50 }, p6{ 250, 50 }, p7{ 250, 100 }, p8{ 50, 400 },
+        d{ 40, 0 }, d2{ 0, 40 };
     canvas.drawTriangle(p1, p1 - d, p1 - d2, HT_BLACK);
     canvas.drawTriangle(p2, p2 + d, p2 - d2, HT_BLACK);
     canvas.drawTriangle(p3, p3 - d, p3 + d2, HT_BLACK);
     canvas.drawTriangle(p4, p4 + d, p4 + d2, HT_BLACK);
+
+    canvas.drawTriangle(p5, p5, p5, HT_BLACK);
+    canvas.drawTriangle(p6, p6 + d2, p6 - d2, HT_BLACK);
+    canvas.drawTriangle(p6, p6 + d, p6 - d, HT_BLACK);
+    canvas.drawTriangle(p6, p6 + d + d2, p6 - d - d2, HT_BLACK);
+    canvas.drawTriangle(p6, p6 + d - d2, p6 - d + d2, HT_BLACK);
+
+    for (int i = 0; i < 10; i++) {
+        canvas.drawTriangle(p7, p8 + i * d, p8 + (i + 0.5) * d, HT_BLACK);
+    }
 
     if (!save_image(canvas.getBitmap().get(), "draw_triangle_2.png", PNG)) {
         return 1;

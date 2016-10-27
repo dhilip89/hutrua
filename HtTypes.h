@@ -21,6 +21,10 @@ inline HtPoint operator-(const HtPoint& a, const HtPoint& b) {
     return HtPoint{ a.x - b.x, a.y - b.y };
 }
 
+inline HtPoint operator* (const HtScalar &a, const HtPoint &b) {
+    return HtPoint{ a * b.x, a * b.y };
+}
+
 typedef struct _HtSize {
     HtScalar w;
     HtScalar h;

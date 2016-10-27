@@ -117,10 +117,13 @@ void HtCanvas::drawTriangle(HtPoint p1, HtPoint p2, HtPoint p3, HtColor color) {
         x2 += d2;
     }
     if (p2.y < p3.y) {
-        d1 = (p3.x - p2.x) / (p3.y - p2.y);
+        d1 = p3.y - p2.y ? (p3.x - p2.x) / (p3.y - p2.y) : 0;
         x1 = p2.x;
+    } else if (p2.y > p3.y) {
+        d2 = p2.y - p3.y ? (p2.x - p3.x) / (p2.y - p3.y) : 0;
+        x2 = p3.x;
     } else {
-        d2 = (p2.x - p3.x) / (p2.y - p3.y);
+        x1 = p2.x;
         x2 = p3.x;
     }
     for (int y = int(std::min(p2.y, p3.y)); y <= int(std::max(p2.y, p3.y)); y++) {
