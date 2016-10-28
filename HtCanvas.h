@@ -42,9 +42,9 @@ private:
     std::shared_ptr<HtBitmap> bitmap;
     int width;
     int height;
+    HtCanvasType type;
     HtScalar global_alpha;
     HtCompositeOperation global_composite_operation;
-    HtCanvasType type;
 };
 
 #endif // HT_CANVAS_H_
