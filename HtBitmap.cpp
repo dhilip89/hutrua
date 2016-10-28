@@ -1,15 +1,29 @@
 #include <cassert>
 #include <algorithm>
 #include "HtBitmap.h"
+#include "HtCanvas.h"
 
-bool HtBitmap::setPixel(int x, int y, HtColor color) {
+bool HtBitmap::setPixel(int x, int y, HtColor color, HtCompositeOperation operation) {
     if (x < 0 || x >= w || y < 0 || y >= h)
         return false;
-    bitmap[y * w + x] = color;
+    if (color.a == 255 || operation == COPY) {
+        bitmap[y * w + x] = color;
+    } else if (operation == SOURCE_OVER) {
+        HtColor original = bitmap[y * w + x];
+        HtScalar aa = color.a / 255.0;
+        HtScalar ab = original.a / 255.0 * (1 - aa);
+        HtScalar a = aa + ab;
+        HtScalar r = (color.r * aa + original.r * ab) / a;
+        HtScalar g = (color.g * aa + original.g * ab) / a;
+        HtScalar b = (color.b * aa + original.b * ab) / a;
+        bitmap[y * w + x] = HtColor{ unsigned char(r), unsigned char(g), unsigned char(b), unsigned char(a) };
+    } else {
+        return false;
+    }
     return true;
 }
 
-bool HtBitmap::setPixels(int x, int y, int ww, int hh, HtColor color) {
+bool HtBitmap::setPixels(int x, int y, int ww, int hh, HtColor color, HtCompositeOperation operation) {
     if (x >= w || y >= h || ww <= 0 || h <= 0 || x + ww < 0 || y + hh < 0)
         return false;
     if (x < 0) {
@@ -22,11 +36,27 @@ bool HtBitmap::setPixels(int x, int y, int ww, int hh, HtColor color) {
     }
     if (x + ww > w) ww = w - x;
     if (y + hh > h) hh = h - y;
-    auto iter = bitmap.begin() + y * w + x;
-    std::fill(iter, iter + ww, color);
-    for (int i = 1; i < hh; i++) {
+    auto iter = bitmap.begin() + y * w;
+    for (int i = 0; i < hh; i++) {
+        if (color.a == 255 || operation == COPY) {
+            std::fill(iter + x, iter + x + ww, color);
+        } else if (operation == SOURCE_OVER) {
+            std::for_each(iter + x, iter + x + ww, [&color](HtColor& original) {
+                HtScalar aa = color.a / 255.0;
+                HtScalar ab = original.a / 255.0 * (1 - aa);
+                HtScalar a = aa + ab;
+                HtScalar r = (color.r * aa + original.r * ab) / a;
+                HtScalar g = (color.g * aa + original.g * ab) / a;
+                HtScalar b = (color.b * aa + original.b * ab) / a;
+                original.r = unsigned char(r);
+                original.g = unsigned char(g);
+                original.b = unsigned char(b);
+                original.a = unsigned char(a * 255);
+            });
+        } else {
+            return false;
+        }
         iter += w;
-        std::fill(iter, iter + ww, color);
     }
     return true;
 }

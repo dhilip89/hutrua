@@ -15,7 +15,7 @@ int test_save_image() {
                 static_cast<unsigned char>((256 + i - j) % 256),
                 static_cast<unsigned char>((256 + j - i) % 256),
                 static_cast<unsigned char>(255) };
-            bitmap.setPixel(i, j, color);
+            bitmap.setPixel(i, j, color, COPY);
         }
     }
     if (!save_image(&bitmap, "png_test.png", PNG)) {
@@ -157,6 +157,29 @@ int test_draw_triangle_2() {
     return 0;
 }
 
+int test_alpha() {
+    HtCanvas canvas(500, 500);
+    HtPoint p1{ 50, 50 }, p2{ 200, 50 }, d{ 20, 20 };
+    HtSize size{ 50, 50 };
+    HtColor c1{ 255, 0, 0, 128 }, c2{ 0, 255, 0, 128 };
+    canvas.drawRect({ p1, size }, HT_BLACK);
+    p1 += d;
+    canvas.drawRect({ p1, size }, c1);
+    p1 += d;
+    canvas.drawRect({ p1, size }, c2);
+    canvas.setGlobalCompositeOperation(COPY);
+    canvas.drawRect({ p2, size }, HT_BLACK);
+    p2 += d;
+    canvas.drawRect({ p2, size }, c1);
+    p2 += d;
+    canvas.drawRect({ p2, size }, c2);
+
+    if (!save_image(canvas.getBitmap().get(), "draw_alpha.png", PNG)) {
+        return 1;
+    }
+    return 0;
+}
+
 int test_canvas() {
     if (test_draw_rect() != 0) {
         return 1;
@@ -174,6 +197,9 @@ int test_canvas() {
         return 1;
     }
     if (test_draw_triangle_2() != 0) {
+        return 1;
+    }
+    if (test_alpha() != 0) {
         return 1;
     }
     return 0;

@@ -7,7 +7,7 @@
 #include "HtCanvas.h"
 
 HtCanvas::HtCanvas(int width, int height, HtCanvasType type)
-    : width(width), height(height), type(type) {
+    : width(width), height(height), type(type), global_alpha(1.0), global_composite_operation(SOURCE_OVER) {
     assert(width > 0 && height > 0);
     assert(type == RGBA8888);
     bitmap.reset(new HtBitmap(width, height));
@@ -20,7 +20,7 @@ void HtCanvas::drawRect(HtRect rect, HtColor color) {
     int y = rect.top_left.y > 0 ? int(rect.top_left.y) : 0;
     int w = rect.top_left.x + rect.size.w < width ? int(rect.size.w) : width - x;
     int h = rect.top_left.y + rect.size.h < height ? int(rect.size.h) : height - y;
-    bitmap->setPixels(x, y, w, h, color);
+    bitmap->setPixels(x, y, w, h, color, global_composite_operation);
 }
 
 void HtCanvas::drawHairLine(HtPoint p1, HtPoint p2, HtColor color) {
@@ -78,28 +78,28 @@ void HtCanvas::drawHairLine(int x0, int y0, int x1, int y1, HtColor color, int o
     for (int x = x0; x < x1; x++) {
         switch (octant) {
         case 0:
-            bitmap->setPixel(x, y, color);
+            bitmap->setPixel(x, y, color, global_composite_operation);
             break;
         case 1:
-            bitmap->setPixel(y, x, color);
+            bitmap->setPixel(y, x, color, global_composite_operation);
             break;
         case 2:
-            bitmap->setPixel(-y, x, color);
+            bitmap->setPixel(-y, x, color, global_composite_operation);
             break;
         case 3:
-            bitmap->setPixel(-x, y, color);
+            bitmap->setPixel(-x, y, color, global_composite_operation);
             break;
         case 4:
-            bitmap->setPixel(-x, -y, color);
+            bitmap->setPixel(-x, -y, color, global_composite_operation);
             break;
         case 5:
-            bitmap->setPixel(-y, -x, color);
+            bitmap->setPixel(-y, -x, color, global_composite_operation);
             break;
         case 6:
-            bitmap->setPixel(y, -x, color);
+            bitmap->setPixel(y, -x, color, global_composite_operation);
             break;
         case 7:
-            bitmap->setPixel(x, -y, color);
+            bitmap->setPixel(x, -y, color, global_composite_operation);
             break;
         default:
             break;
@@ -125,7 +125,7 @@ void HtCanvas::drawTriangle(HtPoint p1, HtPoint p2, HtPoint p3, HtColor color) {
     d1 = p2.y - p1.y ? (p2.x - p1.x) / (p2.y - p1.y) : 0;
     d2 = p3.y - p1.y ? (p3.x - p1.x) / (p3.y - p1.y) : 0;
     for (int y = int(p1.y); y < int(std::min(p2.y, p3.y)); y++) {
-        bitmap->setPixels(int(x1), int(y), int(x2) - int(x1) + 1, 1, color);
+        bitmap->setPixels(int(x1), int(y), int(x2) - int(x1) + 1, 1, color, global_composite_operation);
         x1 += d1;
         x2 += d2;
     }
@@ -140,7 +140,7 @@ void HtCanvas::drawTriangle(HtPoint p1, HtPoint p2, HtPoint p3, HtColor color) {
         x2 = p3.x;
     }
     for (int y = int(std::min(p2.y, p3.y)); y <= int(std::max(p2.y, p3.y)); y++) {
-        bitmap->setPixels(int(x1), int(y), int(x2) - int(x1) + 1, 1, color);
+        bitmap->setPixels(int(x1), int(y), int(x2) - int(x1) + 1, 1, color, global_composite_operation);
         x1 += d1;
         x2 += d2;
     }
