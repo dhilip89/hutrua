@@ -67,4 +67,18 @@ typedef struct _HtColor {
 #define HT_GREEN HtColor{   0, 255,   0, 255 }
 #define HT_BLUE  HtColor{   0,   0, 255, 255 }
 
+enum HtCompositeOperation {
+    SOURCE_ATOP,
+    SOURCE_IN,
+    SOURCE_OUT,
+    SOURCE_OVER,
+    DESTINATION_ATOP,
+    DESTINATION_IN,
+    DESTINATION_OUT,
+    DESTINATION_OVER,
+    LIGHTER,
+    COPY,
+    XOR
+};
+
 #endif // HT_TYPES_H_

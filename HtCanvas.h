@@ -8,20 +8,6 @@ enum HtCanvasType {
     RGBA8888
 };
 
-enum HtCompositeOperation {
-    SOURCE_ATOP,
-    SOURCE_IN,
-    SOURCE_OUT,
-    SOURCE_OVER,
-    DESTINATION_ATOP,
-    DESTINATION_IN,
-    DESTINATION_OUT,
-    DESTINATION_OVER,
-    LIGHTER,
-    COPY,
-    XOR
-};
-
 class HtCanvas {
 public:
     HtCanvas(int width, int height, HtCanvasType type = RGBA8888);

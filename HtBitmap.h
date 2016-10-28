@@ -3,8 +3,6 @@
 #include <vector>
 #include "HtTypes.h"
 
-enum HtCompositeOperation;
-
 class HtBitmap {
 public:
     HtBitmap(int w, int h, HtColor color = HT_WHITE) : w(w), h(h), bitmap(w * h, color) {};

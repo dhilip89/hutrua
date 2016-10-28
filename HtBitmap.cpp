@@ -1,7 +1,6 @@
 #include <cassert>
 #include <algorithm>
 #include "HtBitmap.h"
-#include "HtCanvas.h"
 
 bool HtBitmap::setPixel(int x, int y, HtColor color, HtCompositeOperation operation) {
     if (x < 0 || x >= w || y < 0 || y >= h)
