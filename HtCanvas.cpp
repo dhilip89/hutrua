@@ -7,10 +7,23 @@
 #include "HtCanvas.h"
 
 HtCanvas::HtCanvas(int width, int height, HtCanvasType type)
-    : width(width), height(height), type(type), global_alpha(1.0), global_composite_operation(SOURCE_OVER) {
+    : width(width), height(height), type(type) {
     assert(width > 0 && height > 0);
     assert(type == RGBA8888);
     bitmap.reset(new HtBitmap(width, height));
+}
+
+void HtCanvas::clearRect(HtScalar x, HtScalar y, HtScalar w, HtScalar h) {
+    drawRect({ {x, y}, {w, h} }, HT_TRANSPARENT_BLACK);
+}
+
+void HtCanvas::fillRect(HtScalar x, HtScalar y, HtScalar w, HtScalar h) {
+    drawRect({ { x, y },{ w, h } }, state.fill_style);
+}
+
+void HtCanvas::strokeRect(HtScalar x, HtScalar y, HtScalar w, HtScalar h) {
+    // TODO: real stroke rect
+    drawRect({ { x, y },{ w, h } }, state.stroke_style);
 }
 
 void HtCanvas::drawRect(HtRect rect, HtColor color) {
@@ -20,7 +33,7 @@ void HtCanvas::drawRect(HtRect rect, HtColor color) {
     int y = rect.top_left.y > 0 ? int(rect.top_left.y) : 0;
     int w = rect.top_left.x + rect.size.w < width ? int(rect.size.w) : width - x;
     int h = rect.top_left.y + rect.size.h < height ? int(rect.size.h) : height - y;
-    bitmap->setPixels(x, y, w, h, color, global_composite_operation);
+    bitmap->setPixels(x, y, w, h, color, state.global_composite_operation);
 }
 
 void HtCanvas::drawHairLine(HtPoint p1, HtPoint p2, HtColor color) {
@@ -55,8 +68,7 @@ void HtCanvas::drawHairLine(HtPoint p1, HtPoint p2, HtColor color) {
     }
 }
 
-void HtCanvas::drawLine(HtPoint p1, HtPoint p2, HtScalar line_width, HtColor color)
-{
+void HtCanvas::drawLine(HtPoint p1, HtPoint p2, HtScalar line_width, HtColor color) {
     if (line_width < 1) {
         drawHairLine(p1, p2, color);
         return;
@@ -68,8 +80,7 @@ void HtCanvas::drawLine(HtPoint p1, HtPoint p2, HtScalar line_width, HtColor col
     drawTriangle(p2 + w, p2 - w, p1 - w, color);
 }
 
-void HtCanvas::drawHairLine(int x0, int y0, int x1, int y1, HtColor color, int octant)
-{
+void HtCanvas::drawHairLine(int x0, int y0, int x1, int y1, HtColor color, int octant) {
     x1+=1;
     int dx = x1 - x0 + 1;
     int dy = y1 - y0 + 1;
@@ -78,28 +89,28 @@ void HtCanvas::drawHairLine(int x0, int y0, int x1, int y1, HtColor color, int o
     for (int x = x0; x < x1; x++) {
         switch (octant) {
         case 0:
-            bitmap->setPixel(x, y, color, global_composite_operation);
+            bitmap->setPixel(x, y, color, state.global_composite_operation);
             break;
         case 1:
-            bitmap->setPixel(y, x, color, global_composite_operation);
+            bitmap->setPixel(y, x, color, state.global_composite_operation);
             break;
         case 2:
-            bitmap->setPixel(-y, x, color, global_composite_operation);
+            bitmap->setPixel(-y, x, color, state.global_composite_operation);
             break;
         case 3:
-            bitmap->setPixel(-x, y, color, global_composite_operation);
+            bitmap->setPixel(-x, y, color, state.global_composite_operation);
             break;
         case 4:
-            bitmap->setPixel(-x, -y, color, global_composite_operation);
+            bitmap->setPixel(-x, -y, color, state.global_composite_operation);
             break;
         case 5:
-            bitmap->setPixel(-y, -x, color, global_composite_operation);
+            bitmap->setPixel(-y, -x, color, state.global_composite_operation);
             break;
         case 6:
-            bitmap->setPixel(y, -x, color, global_composite_operation);
+            bitmap->setPixel(y, -x, color, state.global_composite_operation);
             break;
         case 7:
-            bitmap->setPixel(x, -y, color, global_composite_operation);
+            bitmap->setPixel(x, -y, color, state.global_composite_operation);
             break;
         default:
             break;
@@ -125,7 +136,7 @@ void HtCanvas::drawTriangle(HtPoint p1, HtPoint p2, HtPoint p3, HtColor color) {
     d1 = p2.y - p1.y ? (p2.x - p1.x) / (p2.y - p1.y) : 0;
     d2 = p3.y - p1.y ? (p3.x - p1.x) / (p3.y - p1.y) : 0;
     for (int y = int(p1.y); y < int(std::min(p2.y, p3.y)); y++) {
-        bitmap->setPixels(int(x1), int(y), int(x2) - int(x1) + 1, 1, color, global_composite_operation);
+        bitmap->setPixels(int(x1), int(y), int(x2) - int(x1) + 1, 1, color, state.global_composite_operation);
         x1 += d1;
         x2 += d2;
     }
@@ -140,7 +151,7 @@ void HtCanvas::drawTriangle(HtPoint p1, HtPoint p2, HtPoint p3, HtColor color) {
         x2 = p3.x;
     }
     for (int y = int(std::min(p2.y, p3.y)); y <= int(std::max(p2.y, p3.y)); y++) {
-        bitmap->setPixels(int(x1), int(y), int(x2) - int(x1) + 1, 1, color, global_composite_operation);
+        bitmap->setPixels(int(x1), int(y), int(x2) - int(x1) + 1, 1, color, state.global_composite_operation);
         x1 += d1;
         x2 += d2;
     }

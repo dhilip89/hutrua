@@ -60,12 +60,13 @@ typedef struct _HtColor {
     unsigned char a;
 } HtColor;
 
-#define HT_BLACK HtColor{   0,   0,   0, 255 }
-#define HT_WHITE HtColor{ 255, 255, 255, 255 }
-#define HT_GREY  HtColor{ 128, 128, 128, 255 }
-#define HT_RED   HtColor{ 255,   0,   0, 255 }
-#define HT_GREEN HtColor{   0, 255,   0, 255 }
-#define HT_BLUE  HtColor{   0,   0, 255, 255 }
+#define HT_BLACK             HtColor{   0,   0,   0, 255 }
+#define HT_TRANSPARENT_BLACK HtColor{   0,   0,   0,   0 }
+#define HT_WHITE             HtColor{ 255, 255, 255, 255 }
+#define HT_GREY              HtColor{ 128, 128, 128, 255 }
+#define HT_RED               HtColor{ 255,   0,   0, 255 }
+#define HT_GREEN             HtColor{   0, 255,   0, 255 }
+#define HT_BLUE              HtColor{   0,   0, 255, 255 }
 
 enum HtCompositeOperation {
     SOURCE_ATOP,
