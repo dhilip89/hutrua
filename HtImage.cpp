@@ -90,8 +90,8 @@ bool save_bmp_image(HtBitmap* bitmap, const std::string path) {
         uint32_t unused[12];
     } BITMAPV4HEADER;
     # pragma pack ()
-    assert(sizeof(BMP_header) == 14);
-    assert(sizeof(DIB_header) == 108);
+    static_assert(sizeof(BMP_header) == 14, "BMP_header should be 14 bytes long");
+    static_assert(sizeof(DIB_header) == 108, "BMP_header should be 108 bytes long");
     BITMAPV4HEADER.width = width;
     BITMAPV4HEADER.height = height;
     BITMAPV4HEADER.bitmap_size = width * height * bytes_per_pixel;

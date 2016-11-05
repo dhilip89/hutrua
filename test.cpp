@@ -7,14 +7,22 @@
 #include "HtTypes.h"
 #include "HtBitmap.h"
 
+inline unsigned char i2uc(int i) {
+    return static_cast<unsigned char>(i);
+}
+
+inline HtScalar i2s(int i) {
+    return static_cast<HtScalar>(i);
+}
+
 int test_save_image() {
     HtBitmap bitmap(256, 256);
     for (int i = 0; i < 256; i++) {
         for (int j = 0; j < 256; j++) {
-            HtColor color{ static_cast<unsigned char>((i + j) % 256),
-                static_cast<unsigned char>((256 + i - j) % 256),
-                static_cast<unsigned char>((256 + j - i) % 256),
-                static_cast<unsigned char>(255) };
+            HtColor color{ i2uc((i + j) % 256),
+                i2uc((256 + i - j) % 256),
+                i2uc((256 + j - i) % 256),
+                i2uc(255) };
             bitmap.setPixel(i, j, color, COPY);
         }
     }
@@ -75,10 +83,8 @@ int test_draw_line_2() {
     std::uniform_int_distribution<> dis_color(0, 255);
     std::uniform_int_distribution<> dis_pos(-600, 600);
     for (int i = 0; i < 1000; i++) {
-        canvas.drawHairLine({ static_cast<HtScalar>(dis_pos(gen)), static_cast<HtScalar>(dis_pos(gen)) },
-            { static_cast<HtScalar>(dis_pos(gen)), static_cast<HtScalar>(dis_pos(gen)) },
-            { static_cast<unsigned char>(dis_color(gen)), static_cast<unsigned char>(dis_color(gen)), 
-            static_cast<unsigned char>(dis_color(gen)), 255});
+        canvas.drawHairLine({ i2s(dis_pos(gen)), i2s(dis_pos(gen)) }, { i2s(dis_pos(gen)), i2s(dis_pos(gen)) },
+            { i2uc(dis_color(gen)), i2uc(dis_color(gen)), i2uc(dis_color(gen)), 255});
     }
 
     if (!save_image(canvas.getBitmap().get(), "draw_line_2.png", PNG)) {
