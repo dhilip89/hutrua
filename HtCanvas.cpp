@@ -159,44 +159,46 @@ void HtCanvas::drawTriangle(HtPoint p1, HtPoint p2, HtPoint p3, HtColor color) {
 HtScalar edgeAA(HtScalar b, HtScalar c, HtScalar r) {
     if (r >= 0 && r + b <= 0 && r + c <= 0) {
         return r * r / (2 * b * c);
-    }
-    else if (r <= 0 && r + b >= 0 && r + c >= 0) {
+    } else if (r <= 0 && r + b >= 0 && r + c >= 0) {
         return 1 - r * r / (2 * b * c);
-    }
-    else if (r + b >= 0 && r <= 0 && r + b + c <= 0) {
+    } else if (r + b >= 0 && r <= 0 && r + b + c <= 0) {
         return -(r + b) * (r + b) / (2 * b * c);
-    }
-    else if (r + b <= 0 && r >= 0 && r + b + c >= 0) {
+    } else if (r + b <= 0 && r >= 0 && r + b + c >= 0) {
         return 1 + (r + b) * (r + b) / (2 * b * c);
-    }
-    else if (r + b + c >= 0 && r + b <= 0 && r + c <= 0) {
+    } else if (r + b + c >= 0 && r + b <= 0 && r + c <= 0) {
         return (r + b + c) * (r + b + c) / (2 * b * c);
-    }
-    else if (r + b + c <= 0 && r + b >= 0 && r + c >= 0) {
+    } else if (r + b + c <= 0 && r + b >= 0 && r + c >= 0) {
         return 1 - (r + b + c) * (r + b + c) / (2 * b * c);
-    }
-    else if (r + c >= 0 && r <= 0 && r + b + c <= 0) {
+    } else if (r + c >= 0 && r <= 0 && r + b + c <= 0) {
         return -(r + c) * (r + c) / (2 * b * c);
-    }
-    else if (r + c <= 0 && r >= 0 && r + b + c >= 0) {
+    } else if (r + c <= 0 && r >= 0 && r + b + c >= 0) {
         return 1 + (r + c) * (r + c) / (2 * b * c);
-    }
-    else if (r >= 0 && r + b >= 0 && r + c <= 0) {
+    } else if (r >= 0 && r + b >= 0 && r + c <= 0) {
         return -(2 * r + b) / (2 * c);
-    }
-    else if (r <= 0 && r + b <= 0 && r + c >= 0) {
+    } else if (r <= 0 && r + b <= 0 && r + c >= 0) {
         return 1 + (2 * r + b) / (2 * c);
-    }
-    else if (r >= 0 && r + c >= 0 && r + b <= 0) {
+    } else if (r >= 0 && r + c >= 0 && r + b <= 0) {
         return -(2 * r + c) / (2 * b);
-    }
-    else if (r <= 0 && r + c <= 0 && r + b >= 0) {
+    } else if (r <= 0 && r + c <= 0 && r + b >= 0) {
         return 1 + (2 * r + c) / (2 * b);
-    }
-    else {
+    } else {
         assert(0);
         return 0;
     }
+}
+
+HtScalar vertexAA(HtScalar b0, HtScalar c0, HtScalar r0, HtScalar b1, HtScalar c1, HtScalar r1) {
+    // It is too hard for me to do an accurate calcaulation, so use a multisampling approximation.
+    int sample_num = 8;
+    int sample_count = 0;
+    for (int i = 0; i < sample_num; i++) {
+        for (int j = 0; j < sample_num; j++) {
+            if (r0 + b0 * (i + 0.5) / sample_num + c0 * (j + 0.5) / sample_num > 0 &&
+                r1 + b1 * (i + 0.5) / sample_num + c1 * (j + 0.5) / sample_num > 0)
+                sample_count++;
+        }
+    }
+    return sample_count * 1.0 / (sample_num * sample_num);
 }
 
 void HtCanvas::drawTriangleAA(HtPoint p0, HtPoint p1, HtPoint p2, HtColor color) {
@@ -257,7 +259,7 @@ void HtCanvas::drawTriangleAA(HtPoint p0, HtPoint p1, HtPoint p2, HtColor color)
                     bb1 = r1 >= 0 && r1 + b1 >= 0 && r1 + c1 >= 0 && r1 + b1 + c1 >= 0,
                     bb2 = r2 >= 0 && r2 + b2 >= 0 && r2 + c2 >= 0 && r2 + b2 + c2 >= 0;
 
-                HtColor AAColor = HT_RED;
+                HtColor AAColor;
 
                 // one edge cross this pixel
                 if (!bb0 && bb1 && bb2) { // edge0 cross this pixel
@@ -269,31 +271,45 @@ void HtCanvas::drawTriangleAA(HtPoint p0, HtPoint p1, HtPoint p2, HtColor color)
                 } else if (bb0 && bb1 && !bb2) {
                     assert(edgeAA(b2, c2, r2) > 0);
                     AAColor = color * edgeAA(b2, c2, r2);
-                }
-
                 // two edges cross this pixel
-                if (!bb0 && !bb1 && bb2) { // edge0 edge1 cross this pixel
-                    if (x <= p1.x || x >= p1.x + 1 || y <= p1.y || y >= p1.y + 1) { // p1 not inside this pixel
+                } else if (!bb0 && !bb1 && bb2) { // edge0 edge1 cross this pixel
+                    if ((p1.x <= x || p1.x >= x + 1) && (p1.y <= y || p1.y >= y + 1)) { // p1 not inside this pixel
                         HtScalar w0 = edgeAA(b0, c0, r0),
                             w1 = edgeAA(b1, c1, r1);
+                        assert(edgeAA(b0, c0, r0) > 0);
+                        assert(edgeAA(b1, c1, r1) > 0);
+                        assert(w0 + w1 - 1 >= 0);
                         AAColor = color * (w0 + w1 - 1);
+                    } else { // p1 inside this pixel
+                        AAColor = color * vertexAA(b0, c0, r0, b1, c1, r1);
                     }
                 } else if (bb0 && !bb1 && !bb2) {
-                    if (x <= p2.x || x >= p2.x + 1 || y <= p2.y || y >= p2.y + 1) {
+                    if ((p2.x <= x || p2.x >= x + 1) && (p2.y <= y || p2.y >= y + 1)) {
                         HtScalar w0 = edgeAA(b1, c1, r1),
                             w1 = edgeAA(b2, c2, r2);
+                        assert(edgeAA(b1, c1, r1) > 0);
+                        assert(edgeAA(b2, c2, r2) > 0);
+                        assert(w0 + w1 - 1 >= 0);
                         AAColor = color * (w0 + w1 - 1);
+                    } else {
+                        AAColor = color * vertexAA(b1, c1, r1, b2, c2, r2);
                     }
-                }
-                else if (!bb0 && bb1 && !bb2) {
-                    if (x <= p0.x || x >= p0.x + 1 || y <= p0.y || y >= p0.y + 1) {
+                } else if (!bb0 && bb1 && !bb2) {
+                    if ((p0.x <= x || p0.x >= x + 1) && (p0.y <= y || p0.y >= y + 1)) {
                         HtScalar w0 = edgeAA(b0, c0, r0),
                             w1 = edgeAA(b2, c2, r2);
+                        assert(edgeAA(b2, c2, r2) > 0);
+                        assert(edgeAA(b0, c0, r0) > 0);
+                        assert(w0 + w1 - 1 >= 0);
                         AAColor = color * (w0 + w1 - 1);
+                    } else {
+                        AAColor = color * vertexAA(b0, c0, r0, b2, c2, r2);
                     }
+                } else {
+                    // TODO: Three edges cross this pixel
+                    AAColor = color * vertexAA(b0, c0, r0, b1, c1, r1);
                 }
 
-                // TODO: cases of vertex isn't integer or three edges cross one pixel
                 bitmap->setPixel(x, y, AAColor, state.global_composite_operation);
             } else {
                 if (r0 == 0) r0 = r0 + b0 == 0 ? r0 + c0 : r0 + b0;
@@ -306,4 +322,23 @@ void HtCanvas::drawTriangleAA(HtPoint p0, HtPoint p1, HtPoint p2, HtColor color)
             }
         }
     }
+}
+
+void HtCanvas::drawLineAA(HtPoint p1, HtPoint p2, HtScalar line_width, HtColor color) {
+    HtPoint displacement{ 0.5, 0.5 };
+    p1 += displacement;
+    p2 += displacement;
+    if (line_width <= 1) {
+        drawHairLine(p1, p2, color);
+        return;
+    }
+
+    HtPoint w{ p1.y - p2.y, p2.x - p1.x };
+    w = 0.5 * (line_width) * normal(w);
+    drawTriangleAA(p1 + w, p1 - w, p2 + w, color);
+    drawTriangleAA(p2 + w, p2 - w, p1 - w, color);
+}
+
+void HtCanvas::drawHairLineAA(HtPoint p1, HtPoint p2, HtColor color) {
+    drawHairLine(p1, p2, color);
 }

@@ -49,7 +49,11 @@ public:
 
     void drawHairLine(HtPoint p1, HtPoint p2, HtColor color);
 
+    void drawHairLineAA(HtPoint p1, HtPoint p2, HtColor color);
+
     void drawLine(HtPoint p1, HtPoint p2, HtScalar width, HtColor color);
+
+    void drawLineAA(HtPoint p1, HtPoint p2, HtScalar width, HtColor color);
 
     void drawTriangle(HtPoint p1, HtPoint p2, HtPoint p3, HtColor color);
 

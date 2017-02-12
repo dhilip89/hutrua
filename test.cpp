@@ -53,22 +53,22 @@ int test_draw_line() {
     for (int i = 0; i < 360; i += 2) {
         double x = std::sin(i * pi / 180.0);
         double y = std::cos(i * pi / 180.0);
-        canvas.drawHairLine({ 250 + 200 * x * 0.25, 250 + 200 * y * 0.25 },
+        canvas.drawHairLineAA({ 250 + 200 * x * 0.25, 250 + 200 * y * 0.25 },
         { 250 + 200 * x, 250 + 200 * y }, HT_BLACK);
     }
 
-    canvas.drawHairLine({ 80, 80 }, { 80 + 50, 80 + 50 }, HT_RED);
-    canvas.drawHairLine({ 80, 80 }, { 80 + 50, 80 - 50 }, HT_RED);
-    canvas.drawHairLine({ 80, 80 }, { 80 - 50, 80 + 50 }, HT_RED);
-    canvas.drawHairLine({ 80, 80 }, { 80 - 50, 80 - 50 }, HT_RED);
-    canvas.drawHairLine({ 80, 80 }, { 80 + 0, 80 + 50 }, HT_RED);
-    canvas.drawHairLine({ 80, 80 }, { 80 + 50, 80 + 0 }, HT_RED);
-    canvas.drawHairLine({ 80, 80 }, { 80 + 0, 80 - 50 }, HT_RED);
-    canvas.drawHairLine({ 80, 80 }, { 80 - 50, 80 + 0 }, HT_RED);
+    canvas.drawHairLineAA({ 80, 80 }, { 80 + 50, 80 + 50 }, HT_RED);
+    canvas.drawHairLineAA({ 80, 80 }, { 80 + 50, 80 - 50 }, HT_RED);
+    canvas.drawHairLineAA({ 80, 80 }, { 80 - 50, 80 + 50 }, HT_RED);
+    canvas.drawHairLineAA({ 80, 80 }, { 80 - 50, 80 - 50 }, HT_RED);
+    canvas.drawHairLineAA({ 80, 80 }, { 80 + 0, 80 + 50 }, HT_RED);
+    canvas.drawHairLineAA({ 80, 80 }, { 80 + 50, 80 + 0 }, HT_RED);
+    canvas.drawHairLineAA({ 80, 80 }, { 80 + 0, 80 - 50 }, HT_RED);
+    canvas.drawHairLineAA({ 80, 80 }, { 80 - 50, 80 + 0 }, HT_RED);
 
     for (int i = 0; i < 100; i += 10) {
-        canvas.drawHairLine({ 400. + i, 400 }, { 344. + i, 444 }, HT_BLUE);
-        canvas.drawHairLine({ 344. + i + 5, 444 }, { 400. + i + 5, 400 }, HT_BLUE);
+        canvas.drawHairLineAA({ 400. + i, 400 }, { 344. + i, 444 }, HT_BLUE);
+        canvas.drawHairLineAA({ 344. + i + 5, 444 }, { 400. + i + 5, 400 }, HT_BLUE);
     }
 
     if (!save_image(canvas.getBitmap().get(), "draw_line.png", PNG)) {
@@ -83,7 +83,7 @@ int test_draw_line_2() {
     std::uniform_int_distribution<> dis_color(0, 255);
     std::uniform_int_distribution<> dis_pos(-600, 600);
     for (int i = 0; i < 1000; i++) {
-        canvas.drawHairLine({ i2s(dis_pos(gen)), i2s(dis_pos(gen)) }, { i2s(dis_pos(gen)), i2s(dis_pos(gen)) },
+        canvas.drawHairLineAA({ i2s(dis_pos(gen)), i2s(dis_pos(gen)) }, { i2s(dis_pos(gen)), i2s(dis_pos(gen)) },
             { i2uc(dis_color(gen)), i2uc(dis_color(gen)), i2uc(dis_color(gen)), 255});
     }
 
@@ -98,8 +98,8 @@ int test_draw_line_3() {
     HtPoint p1{ 50, 50 }, p2{ 50, 150 }, p3{ 100, 250 }, p4{ 20, 450 }, d{ 25, 0 };
     HtScalar width = 0;
     for (int i = 0; i < 20; i++) {
-        canvas.drawLine(p1, p2, width, HT_BLACK);
-        canvas.drawLine(p3, p4, width * 2, HT_BLACK);
+        canvas.drawLineAA(p1, p2, width, HT_BLACK);
+        canvas.drawLineAA(p3, p4, width * 2, HT_BLACK);
         p1 += d;
         p2 += d;
         p3 += d;
@@ -110,7 +110,7 @@ int test_draw_line_3() {
     HtPoint p5{ 400, 20 }, p6{ 480, 50 }, d2{ -20, 20 };
     width = 0;
     for (int i = 0; i < 23; i++) {
-        canvas.drawLine(p5, p6, width, HT_RED);
+        canvas.drawLineAA(p5, p6, width, HT_RED);
         p5 += d2;
         p6 += d2;
         width += 1;
