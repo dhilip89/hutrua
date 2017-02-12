@@ -125,11 +125,11 @@ int test_draw_line_3() {
 int test_draw_triangle() {
     HtCanvas canvas(500, 500);
     HtPoint p1{ 200, 80 }, p2{ 80, 300 }, p3{ 240, 250 }, d{ 200, 0 }, d2{ 2, 0 };
-    canvas.drawTriangle(p1, p2, p3, HT_RED);
+    canvas.drawTriangleAA(p1, p2, p3, HT_RED);
     canvas.drawHairLine(p1 + d2, p2 + d2, HT_BLACK);
     canvas.drawHairLine(p2 + d2, p3 + d2, HT_BLACK);
     canvas.drawHairLine(p3 + d2, p1 + d2, HT_BLACK);
-    canvas.drawTriangle(p1 + d, p2 + d, p3 + d, HT_BLACK);
+    canvas.drawTriangleAA(p1 + d, p2 + d, p3 + d, HT_BLACK);
 
     if (!save_image(canvas.getBitmap().get(), "draw_triangle.png", PNG)) {
         return 1;
@@ -141,20 +141,20 @@ int test_draw_triangle_2() {
     HtCanvas canvas(500, 500);
     HtPoint p1{ 50, 50 }, p2{ 60, 50 }, p3{ 50, 60 }, p4{ 60, 60 },
         p5{ 150, 50 }, p6{ 250, 50 }, p7{ 250, 100 }, p8{ 50, 400 },
-        d{ 40, 0 }, d2{ 0, 40 };
-    canvas.drawTriangle(p1, p1 - d, p1 - d2, HT_BLACK);
-    canvas.drawTriangle(p2, p2 + d, p2 - d2, HT_BLACK);
-    canvas.drawTriangle(p3, p3 - d, p3 + d2, HT_BLACK);
-    canvas.drawTriangle(p4, p4 + d, p4 + d2, HT_BLACK);
+        d{ 10, 0 }, d2{ 0, 40 };
+    canvas.drawTriangleAA(p1, p1 - d, p1 - d2, HT_BLACK);
+    canvas.drawTriangleAA(p2, p2 + d, p2 - d2, HT_BLACK);
+    canvas.drawTriangleAA(p3, p3 - d, p3 + d2, HT_BLACK);
+    canvas.drawTriangleAA(p4, p4 + d, p4 + d2, HT_BLACK);
 
-    canvas.drawTriangle(p5, p5, p5, HT_BLACK);
-    canvas.drawTriangle(p6, p6 + d2, p6 - d2, HT_BLACK);
-    canvas.drawTriangle(p6, p6 + d, p6 - d, HT_BLACK);
-    canvas.drawTriangle(p6, p6 + d + d2, p6 - d - d2, HT_BLACK);
-    canvas.drawTriangle(p6, p6 + d - d2, p6 - d + d2, HT_BLACK);
+    canvas.drawTriangleAA(p5, p5, p5, HT_BLACK);
+    canvas.drawTriangleAA(p6, p6 + d2, p6 - d2, HT_BLACK);
+    canvas.drawTriangleAA(p6, p6 + d, p6 - d, HT_BLACK);
+    canvas.drawTriangleAA(p6, p6 + d + d2, p6 - d - d2, HT_BLACK);
+    canvas.drawTriangleAA(p6, p6 + d - d2, p6 - d + d2, HT_BLACK);
 
-    for (int i = 0; i < 10; i++) {
-        canvas.drawTriangle(p7, p8 + i * d, p8 + (i + 0.5) * d, HT_BLACK);
+    for (int i = 0; i < 40; i++) {
+        canvas.drawTriangleAA(p7, p8 + i * d, p8 + (i + 0.5) * d, HT_BLACK);
     }
 
     if (!save_image(canvas.getBitmap().get(), "draw_triangle_2.png", PNG)) {

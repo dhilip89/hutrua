@@ -53,6 +53,8 @@ public:
 
     void drawTriangle(HtPoint p1, HtPoint p2, HtPoint p3, HtColor color);
 
+    void drawTriangleAA(HtPoint p0, HtPoint p1, HtPoint p2, HtColor color);
+
 
     // Get/set canvas properties.
     int getWidth() const { return width; }

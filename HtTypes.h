@@ -60,6 +60,15 @@ typedef struct _HtColor {
     unsigned char a;
 } HtColor;
 
+inline const HtColor operator* (const HtColor& color, const HtScalar &w) {
+    return HtColor{
+        color.r,
+        color.g,
+        color.b,
+        (unsigned char)(HtScalar(color.a) * w)
+    };
+}
+
 #define HT_BLACK             HtColor{   0,   0,   0, 255 }
 #define HT_TRANSPARENT_BLACK HtColor{   0,   0,   0,   0 }
 #define HT_WHITE             HtColor{ 255, 255, 255, 255 }

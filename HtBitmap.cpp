@@ -16,7 +16,7 @@ bool HtBitmap::setPixel(int x, int y, HtColor color, HtCompositeOperation operat
         HtScalar g = (color.g * aa + original.g * ab) / a;
         HtScalar b = (color.b * aa + original.b * ab) / a;
         bitmap[y * w + x] = HtColor{ static_cast<unsigned char>(r), static_cast<unsigned char>(g),
-            static_cast<unsigned char>(b), static_cast<unsigned char>(a) };
+            static_cast<unsigned char>(b), static_cast<unsigned char>(a * 255) };
     } else {
         return false;
     }
